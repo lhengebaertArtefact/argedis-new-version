@@ -1,0 +1,20 @@
+{
+    "navigation": {
+        "previous": "Previous",
+        "next": "Next",
+        "switchToEnglish": "English version",
+        "switchToFrench": "Version française"
+    },
+    "producers": {
+        "products": "Our products:",
+        "noProducts": "No products available"
+    },
+    "map": {
+        "regionMap": "{{region}} Map",
+        "regionImageComing": "Region image coming soon"
+    },
+    "stations": {
+        "title": "Argedis Service Stations",
+        "region": "Region: {{region}}"
+    }
+}

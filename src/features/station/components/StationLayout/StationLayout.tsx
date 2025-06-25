@@ -6,6 +6,7 @@ import { Producer } from "../../types";
 import ProducerDetails from "../ProducerDetails/ProducerDetails";
 import ProductPanel from "../ProductPanel/ProductPanel";
 import RegionMap from "../RegionMap/RegionMap";
+import LanguageToggle from "@/shared/components/LanguageToggle/LanguageToggle";
 
 interface StationLayoutProps {
   station: Station;
@@ -21,8 +22,9 @@ export default function StationLayout({
   );
 
   return (
-    <div className="flex flex-col h-full">
-      {/* map */}
+    <div className="flex flex-col h-full relative">
+      <LanguageToggle />
+
       <div className="flex-1 flex items-center justify-center p-8">
         <RegionMap
           station={station}
@@ -31,20 +33,20 @@ export default function StationLayout({
           onProducerSelect={setSelectedProducer}
         />
       </div>
-      {/* Producer */}
+
       {selectedProducer && (
         <div className="h-80 border-t border-gray-200">
           <div className="flex h-full">
             <div className="flex-1">
-              <ProducerDetails producer={selectedProducer} />
-            </div>
-
-            <div className="w-96 border-l border-gray-200">
-              <ProductPanel
+              <ProducerDetails
                 producer={selectedProducer}
                 producers={producers}
                 onProducerChange={setSelectedProducer}
               />
+            </div>
+
+            <div className="w-96 border-l border-gray-200">
+              <ProductPanel producer={selectedProducer} />
             </div>
           </div>
         </div>

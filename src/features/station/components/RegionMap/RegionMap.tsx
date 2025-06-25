@@ -1,6 +1,9 @@
+"use client";
+
 import { Station } from "@/shared/types";
 import { Producer } from "../../types";
 import { MAP_DIMENSIONS } from "@/shared/constants/dimensions";
+import { useTranslation } from "react-i18next";
 
 interface RegionMapProps {
   station: Station;
@@ -15,9 +18,10 @@ export default function RegionMap({
   selectedProducer,
   onProducerSelect,
 }: RegionMapProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="relative">
-      {/* map */}
       <div
         className="bg-green-100 rounded-lg border border-green-200 flex items-center justify-center"
         style={{
@@ -27,13 +31,12 @@ export default function RegionMap({
       >
         <div className="text-center">
           <h3 className="text-2xl font-bold text-green-800 mb-2">
-            Carte {station.region}
+            {t("map.regionMap", { region: station.region })}
           </h3>
-          <p className="text-green-600">Image de la région à venir</p>
+          <p className="text-green-600">{t("map.regionImageComing")}</p>
         </div>
       </div>
 
-      {/* Blobs producers */}
       {producers.map((producer) => (
         <div key={producer.id}>
           <button
