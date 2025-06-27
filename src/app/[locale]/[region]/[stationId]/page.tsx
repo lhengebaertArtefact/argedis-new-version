@@ -41,6 +41,8 @@ export default async function StationPage({ params }: StationPageProps) {
         mapPosition: { x: producer.x, y: producer.y },
         blobPosition: { x: producer.x, y: producer.y },
         picture: producer.picture,
+        miniMap: producer.miniMap,
+        hasSpace: producer.hasSpace,
         products:
           producer.productsCollection?.items.map((product) => ({
             id: product.id,

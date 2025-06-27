@@ -9,6 +9,9 @@ export interface Producer {
   picture?: {
     url: string;
   };
+  miniMap?: {
+    url: string;
+  };
   hasSpace?: boolean;
 }
 

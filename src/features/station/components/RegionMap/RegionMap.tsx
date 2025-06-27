@@ -150,15 +150,13 @@ export default function RegionMap({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="mt-[200px]">
-            <MiniMapConditionalImage
-              imageError={miniMapError}
-              src={station.miniMap || ""}
-              alt="Mini carte de la région"
-              className="w-64 h-48 rounded-lg"
-              onError={handleMiniMapError}
-            />
-          </div>
+          <MiniMapConditionalImage
+            imageError={miniMapError}
+            src={selectedProducer.miniMap?.url || ""}
+            alt="small map of a region"
+            className="mt-[200px]"
+            onError={handleMiniMapError}
+          />
         </motion.div>
       )}
 
