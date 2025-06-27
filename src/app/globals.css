@@ -51,6 +51,14 @@ body {
   font-family: var(--font-nexa-bold);
 }
 
+.text-buttonReturnToMap {
+  font-size: 36px;
+  line-height: 46.64px;
+  letter-spacing: -0.865px;
+  font-weight: 700;
+  font-feature-settings: 'case' on;
+}
+
 .paragraphe p {
   margin-bottom: 30px;
 }

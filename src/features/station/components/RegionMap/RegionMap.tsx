@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "react-lottie";
 import ConditionalLottie from "@/shared/components/ConditionalLottie/ConditionalLottie";
 import MiniMapConditionalImage from "@/shared/components/MiniMapConditionalImage/MiniMapConditionalImage";
+import ArrowBackToMapConditional from "@/shared/components/ArrowBackToMapConditional/ArrowBackToMapConditional";
 import ProducerDetails from "../ProducerDetails/ProducerDetails";
 
 interface RegionMapProps {
@@ -161,6 +162,29 @@ export default function RegionMap({
         </motion.div>
       )}
 
+      {selectedProducer && (
+        <div
+          className="absolute top-[84px] left-[48px] flex z-[10] cursor-pointer"
+          onClick={handleCloseProducerDetails}
+        >
+          <div className="rounded-full bg-white w-[82px] h-[82px] flex justify-center items-center mr-[25px] pr-2">
+            <ArrowBackToMapConditional
+              imageError={imageError}
+              svgContent={
+                <path
+                  d="M0.9375 21.6879C0.9375 22.5066 1.24019 23.205 1.86886 23.8311L20.0304 42.2051C20.5194 42.7349 21.1713 42.9998 21.9164 42.9998C23.4299 42.9998 24.6174 41.7957 24.6174 40.2063C24.6174 39.4357 24.3147 38.7374 23.8024 38.2076L7.43375 21.6879L23.8024 5.16814C24.3147 4.61427 24.6174 3.91592 24.6174 3.14532C24.6174 1.58004 23.4299 0.375977 21.9164 0.375977C21.1713 0.375977 20.5194 0.64087 20.0304 1.17066L1.86886 19.5446C1.24019 20.1708 0.960784 20.8691 0.9375 21.6879Z"
+                  fill={station.secondaryColor || "#000"}
+                />
+              }
+              onError={handleImageError}
+            />
+          </div>
+          <button className="text-white text-buttonReturnToMap font-nexaBold">
+            {currentLang === "fr" ? "Retourner à la carte" : "Return to map"}
+          </button>
+        </div>
+      )}
+
       {!selectedProducer && (
         <div className="absolute inset-0">
           <div className="absolute top-[232px] pl-[150px] pr-[150px] left-0 right-0">
@@ -216,9 +240,8 @@ export default function RegionMap({
             nextProducer={getNextProducer()}
             onNextProducer={handleNextProducer}
             onPreviousProducer={handlePreviousProducer}
-            onClose={handleCloseProducerDetails}
-            primaryColor={station.primaryColor}
-            secondaryColor={station.secondaryColor}
+            primaryColor={station.primaryColor || "#000"}
+            secondaryColor={station.secondaryColor || "#000"}
             totalProducers={producers.length}
           />
         )}
