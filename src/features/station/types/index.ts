@@ -5,6 +5,10 @@ export interface Producer {
   stationId: string;
   mapPosition: { x: number; y: number };
   blobPosition: { x: number; y: number };
+  products?: Product[];
+  picture?: {
+    url: string;
+  };
 }
 
 export interface Product {
@@ -12,4 +16,7 @@ export interface Product {
   name: string;
   description: string;
   producerId: string;
+  picture?: {
+    url: string;
+  };
 }

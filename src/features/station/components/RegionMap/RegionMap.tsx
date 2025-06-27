@@ -8,12 +8,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "react-lottie";
 import ConditionalLottie from "@/shared/components/ConditionalLottie/ConditionalLottie";
 import MiniMapConditionalImage from "@/shared/components/MiniMapConditionalImage/MiniMapConditionalImage";
+import ProducerDetails from "../ProducerDetails/ProducerDetails";
 
 interface RegionMapProps {
   station: Station;
   producers: Producer[];
   selectedProducer: Producer | null;
-  onProducerSelect: (producer: Producer, index: number) => void;
+  onProducerSelect: (producer: Producer | null, index: number) => void;
 }
 
 export default function RegionMap({
@@ -25,6 +26,7 @@ export default function RegionMap({
   const { t, i18n } = useTranslation();
   const [imageError, setImageError] = useState(false);
   const [miniMapError, setMiniMapError] = useState(false);
+  const [showProducerDetails, setShowProducerDetails] = useState(false);
   const currentLang = i18n.language;
 
   const handleImageError = useCallback(() => {
@@ -44,11 +46,64 @@ export default function RegionMap({
     },
   };
 
+  console.log("Station backgroundRadient:", station.backgroundRadient);
+  console.log("Station data:", station);
+
   const backgroundStyle = station.backgroundRadient
     ? station.backgroundRadient.startsWith("http")
       ? { backgroundImage: `url(${station.backgroundRadient})` }
       : { background: station.backgroundRadient }
     : { backgroundColor: "#f0f9ff" };
+
+  const handleProducerClick = (producer: Producer, index: number) => {
+    onProducerSelect(producer, index);
+    setShowProducerDetails(true);
+  };
+
+  const handleCloseProducerDetails = () => {
+    setShowProducerDetails(false);
+    onProducerSelect(null, -1);
+  };
+
+  const handleNextProducer = () => {
+    if (selectedProducer) {
+      const currentIndex = producers.findIndex(
+        (p) => p.id === selectedProducer.id
+      );
+      const nextIndex = (currentIndex + 1) % producers.length;
+      onProducerSelect(producers[nextIndex], nextIndex);
+    }
+  };
+
+  const handlePreviousProducer = () => {
+    if (selectedProducer) {
+      const currentIndex = producers.findIndex(
+        (p) => p.id === selectedProducer.id
+      );
+      const prevIndex =
+        currentIndex === 0 ? producers.length - 1 : currentIndex - 1;
+      onProducerSelect(producers[prevIndex], prevIndex);
+    }
+  };
+
+  const getPreviousProducer = () => {
+    if (!selectedProducer) return null;
+    const currentIndex = producers.findIndex(
+      (p) => p.id === selectedProducer.id
+    );
+    const prevIndex =
+      currentIndex === 0 ? producers.length - 1 : currentIndex - 1;
+    return producers[prevIndex];
+  };
+
+  const getNextProducer = () => {
+    if (!selectedProducer) return null;
+    const currentIndex = producers.findIndex(
+      (p) => p.id === selectedProducer.id
+    );
+    const nextIndex = (currentIndex + 1) % producers.length;
+    return producers[nextIndex];
+  };
 
   return (
     <div
@@ -135,7 +190,7 @@ export default function RegionMap({
                     top: producer.blobPosition.y,
                     left: producer.blobPosition.x,
                   }}
-                  onClick={() => onProducerSelect(producer, index)}
+                  onClick={() => handleProducerClick(producer, index)}
                 >
                   <div className="relative">
                     <div className="w-16 h-16 bg-white rounded-full border-2 border-gray-300 flex items-center justify-center text-xs font-semibold shadow-lg hover:scale-110 transition-transform">
@@ -152,6 +207,22 @@ export default function RegionMap({
           </AnimatePresence>
         </div>
       )}
+
+      <AnimatePresence>
+        {showProducerDetails && selectedProducer && (
+          <ProducerDetails
+            producer={selectedProducer}
+            previousProducer={getPreviousProducer()}
+            nextProducer={getNextProducer()}
+            onNextProducer={handleNextProducer}
+            onPreviousProducer={handlePreviousProducer}
+            onClose={handleCloseProducerDetails}
+            primaryColor={station.primaryColor}
+            secondaryColor={station.secondaryColor}
+            totalProducers={producers.length}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -40,6 +40,15 @@ export default async function StationPage({ params }: StationPageProps) {
         stationId: contentfulStation.id,
         mapPosition: { x: producer.x, y: producer.y },
         blobPosition: { x: producer.x, y: producer.y },
+        picture: producer.picture,
+        products:
+          producer.productsCollection?.items.map((product) => ({
+            id: product.id,
+            name: product.id,
+            description: "",
+            producerId: producer.id,
+            picture: product.picture,
+          })) || [],
       })) || [];
 
     return (
