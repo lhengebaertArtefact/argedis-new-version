@@ -1,17 +1,12 @@
-import StationList from "@/features/stations-list/components/StationList";
-import { stations } from "@/features/stations-list/data/stations.data";
-import AppContainer from "@/core/components/AppContainer/AppContainer";
+import { redirect } from "next/navigation";
 
 interface HomePageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
-export default function HomePage({ params }: HomePageProps) {
-  return (
-    <AppContainer>
-      <StationList stations={stations} />
-    </AppContainer>
-  );
+export default async function HomePage({ params }: HomePageProps) {
+  const { locale } = await params;
+  redirect(`/${locale}/liste`);
 }

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --blanc: #fff;
+  --texte-fiche-fournisseur: #001720;
+  overscroll-behavior: none;
+}
+
+@font-face {
+  font-family: "Nexa-Regular";
+  src:
+    local("Nexa-Regular"),
+    url("/fonts/nexa/Nexa-Regular.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "Nexa-Bold";
+  src:
+    local("Nexa-Bold"),
+    url("/fonts/nexa/Nexa-Bold.otf") format("truetype");
+}
+
+.paragraphe {
+  p {
+    margin-bottom: 30px;
+  }
+}

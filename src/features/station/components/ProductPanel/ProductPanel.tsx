@@ -1,7 +1,6 @@
 "use client";
 
 import { Producer } from "../../types";
-import { products } from "../../data/products.data";
 import { useTranslation } from "react-i18next";
 
 interface ProductPanelProps {
@@ -10,9 +9,12 @@ interface ProductPanelProps {
 
 export default function ProductPanel({ producer }: ProductPanelProps) {
   const { t } = useTranslation();
-  const producerProducts = products.filter(
-    (pro) => pro.producerId === producer.id
-  );
+
+  const products = [
+    { id: "1", name: "Produit 1", description: "Description du produit 1" },
+    { id: "2", name: "Produit 2", description: "Description du produit 2" },
+    { id: "3", name: "Produit 3", description: "Description du produit 3" },
+  ];
 
   return (
     <div className="h-full flex flex-col">
@@ -21,7 +23,7 @@ export default function ProductPanel({ producer }: ProductPanelProps) {
           {t("producers.products")}
         </h3>
 
-        {producerProducts.slice(0, 3).map((product) => (
+        {products.map((product) => (
           <div
             key={product.id}
             className="p-3 bg-gray-50 rounded-lg border border-gray-200"
@@ -31,7 +33,7 @@ export default function ProductPanel({ producer }: ProductPanelProps) {
           </div>
         ))}
 
-        {producerProducts.length === 0 && (
+        {products.length === 0 && (
           <p className="text-gray-500 text-center py-8">
             {t("producers.noProducts")}
           </p>
