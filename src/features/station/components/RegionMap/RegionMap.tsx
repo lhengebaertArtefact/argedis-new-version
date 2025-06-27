@@ -123,7 +123,8 @@ export default function RegionMap({
         }}
         transition={{
           duration: 0.3,
-          opacity: toggle ? { delay: 0.3 } : { duration: 0.2 },
+          ease: "easeOut",
+          opacity: toggle ? { delay: 0.25, duration: 0.05 } : { duration: 0.1 },
         }}
       >
         <motion.div
@@ -131,7 +132,10 @@ export default function RegionMap({
           animate={{
             opacity: toggle ? 0 : 1,
           }}
-          transition={{ duration: 0.2 }}
+          transition={{
+            duration: toggle ? 0.05 : 0.1,
+            delay: toggle ? 0.25 : 0.2,
+          }}
           className="w-full h-full"
         >
           <ConditionalLottie
@@ -145,9 +149,13 @@ export default function RegionMap({
       {toggle && (
         <motion.div
           className="absolute top-[5px] left-[-15px]"
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.1,
+            delay: 0.2,
+            ease: "easeOut",
+          }}
         >
           <MiniMapConditionalImage
             imageError={miniMapError}
