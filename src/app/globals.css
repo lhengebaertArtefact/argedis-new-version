@@ -3,6 +3,22 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --blanc: #fff;
+  --texte-fiche-fournisseur: #001720;
+}
+
+@font-face {
+  font-family: "Nexa-Regular";
+  src:
+    local("Nexa-Regular"),
+    url("/fonts/nexa/Nexa-Regular.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "Nexa-Bold";
+  src:
+    local("Nexa-Bold"),
+    url("/fonts/nexa/Nexa-Bold.otf") format("truetype");
 }
 
 @theme inline {
@@ -10,6 +26,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-nexa-regular: "Nexa-Regular", Arial, sans-serif;
+  --font-nexa-bold: "Nexa-Bold", Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +41,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.font-nexaRegular {
+  font-family: var(--font-nexa-regular);
+}
+
+.font-nexaBold {
+  font-family: var(--font-nexa-bold);
+}
+
+.paragraphe p {
+  margin-bottom: 30px;
 }

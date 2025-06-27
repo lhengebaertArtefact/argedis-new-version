@@ -76,8 +76,6 @@ export default function ProducerDetails({
   const producerPhotoButtonLeft = "w-[51px] ml-[24px]";
   const producerPhotoButtonRight = "w-[51px] mr-[24px]";
 
-  console.log("Producer products:", producer.products);
-
   return (
     <div
       className="absolute z-1 rounded-[40px] bg-white top-[830px] left-[48px] right-[48px] px-[68px] pt-[126px] py-[68px] overflow-hidden"
@@ -133,23 +131,50 @@ export default function ProducerDetails({
       </ul>
 
       <div className="max-h-[674px]" ref={hRef}>
-        <p className="text-2xl mb-12 font-bold" style={{ color: primaryColor }}>
+        <p
+          className="text-[40px] leading-[48px] mb-[48px] font-nexaBold"
+          style={{ color: primaryColor }}
+        >
           {producer.name}
         </p>
         <AnimatePresence>
           <motion.div
-            className="text-lg leading-relaxed"
+            className={`text-[28px] leading-[42px] font-nexaRegular ${
+              producer.hasSpace ? "paragraphe" : ""
+            }`}
+            style={{ color: "var(--texte-fiche-fournisseur)" }}
             initial={{ height: "auto", opacity: 1 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ opacity: 0.5 }}
             transition={{ duration: 0.1, delay: 0.4 }}
           >
             {producer.description && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: producer.description,
-                }}
-              />
+              <>
+                {typeof producer.description === "string" ? (
+                  (() => {
+                    try {
+                      const parsed = JSON.parse(producer.description);
+                      return documentToReactComponents(parsed, {
+                        preserveWhitespace: true,
+                      });
+                    } catch {
+                      return (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: producer.description,
+                          }}
+                        />
+                      );
+                    }
+                  })()
+                ) : producer.description?.json ? (
+                  documentToReactComponents(producer.description.json, {
+                    preserveWhitespace: true,
+                  })
+                ) : (
+                  <div>Description format not supported</div>
+                )}
+              </>
             )}
           </motion.div>
         </AnimatePresence>

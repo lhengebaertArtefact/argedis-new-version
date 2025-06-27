@@ -1,7 +1,7 @@
 export interface Producer {
   id: string;
   name: string;
-  description: string;
+  description: string | { json: any };
   stationId: string;
   mapPosition: { x: number; y: number };
   blobPosition: { x: number; y: number };
@@ -9,6 +9,7 @@ export interface Producer {
   picture?: {
     url: string;
   };
+  hasSpace?: boolean;
 }
 
 export interface Product {
