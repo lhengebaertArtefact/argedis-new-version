@@ -119,177 +119,78 @@ export default function RegionMap({
           scale: toggle ? 0.63 : 1,
           y: toggle ? -595 : 0,
           x: toggle ? -15 : 0,
-          opacity: toggle ? 0 : 1,
+          opacity: toggle ? 1 : 1,
           filter: toggle
             ? "blur(0.3px) brightness(1.015) contrast(1.02)"
             : "blur(0px) brightness(1) contrast(1)",
         }}
         transition={{
-          duration: 0.3,
+          duration: 0.25,
           ease: [0.25, 0.46, 0.45, 0.94],
-          opacity: toggle
-            ? { delay: 0.185, duration: 0.008 }
-            : { duration: 0.08 },
           filter: toggle
-            ? { delay: 0.165, duration: 0.025 }
+            ? { delay: 0.15, duration: 0.025 }
             : { duration: 0.08 },
         }}
       >
-        <motion.div
-          initial={{ opacity: 1 }}
-          animate={{
-            opacity: toggle ? 0 : 1,
-          }}
-          transition={{
-            duration: toggle ? 0.008 : 0.08,
-            delay: toggle ? 0.185 : 0.18,
-            ease: "easeInOut",
-          }}
-          className="w-full h-full"
-        >
-          <ConditionalLottie
-            imageError={imageError}
-            defaultContent={<Lottie options={lottieOptions} />}
-            errorContent={<div className="w-full h-full bg-white"></div>}
-          />
-        </motion.div>
+        <AnimatePresence>
+          <motion.div
+            key="large-map"
+            initial={{ opacity: 1 }}
+            animate={{
+              opacity: toggle ? 0 : 1,
+            }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: toggle ? 0.15 : 0.08,
+              delay: toggle ? 0.25 : 0.18,
+              ease: "easeInOut",
+            }}
+            className="w-full h-full"
+          >
+            <ConditionalLottie
+              imageError={imageError}
+              defaultContent={<Lottie options={lottieOptions} />}
+              errorContent={<div className="w-full h-full bg-white"></div>}
+            />
+          </motion.div>
+        </AnimatePresence>
       </motion.div>
 
-      {/* Crossfade invisible - élément de synchronisation parfaite */}
-      <motion.div
-        className="absolute top-[0px] w-full h-full pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: toggle ? [0, 0.15, 0] : 0,
-        }}
-        transition={{
-          duration: 0.12,
-          delay: 0.17,
-          times: [0, 0.4, 1],
-          ease: "easeInOut",
-        }}
-        style={{
-          background:
-            "radial-gradient(ellipse at center, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.05) 40%, transparent 60%)",
-          mixBlendMode: "soft-light",
-          zIndex: 1,
-        }}
-      />
-
       {toggle && (
-        <motion.div
-          className="absolute top-[5px] left-[-15px]"
-          initial={{
-            opacity: 0,
-            scale: 1.04,
-            filter: "blur(0.3px) brightness(1.015) contrast(1.02)",
-            y: 1,
-            rotateX: 0.5,
-          }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            filter: "blur(0px) brightness(1) contrast(1)",
-            y: 0,
-            rotateX: 0,
-          }}
-          transition={{
-            duration: 0.055,
-            delay: 0.165,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-        >
-          {/* Masque de transition ultra-précis avec morphing visuel */}
+        <AnimatePresence>
           <motion.div
-            className="absolute inset-0 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.12, 0.06, 0] }}
-            transition={{
-              duration: 0.08,
-              delay: 0.165,
-              times: [0, 0.3, 0.7, 1],
-              ease: "easeInOut",
-            }}
-            style={{
-              background:
-                "radial-gradient(ellipse at center, rgba(255,255,255,0.18) 25%, rgba(255,255,255,0.08) 45%, transparent 65%)",
-              mixBlendMode: "soft-light",
-            }}
-          />
-
-          {/* Masque de distraction cognitive */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.08, 0] }}
-            transition={{
-              duration: 0.06,
-              delay: 0.17,
-              times: [0, 0.5, 1],
-              ease: "easeInOut",
-            }}
-            style={{
-              mixBlendMode: "overlay",
-              background:
-                "linear-gradient(45deg, rgba(255,255,255,0.05) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)",
-            }}
-          />
-
-          {/* Micro-animation de continuité */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            initial={{ opacity: 0, scale: 1.001 }}
-            animate={{
-              opacity: [0, 0.04, 0],
-              scale: [1.001, 1, 1.001],
-            }}
-            transition={{
-              duration: 0.12,
-              delay: 0.16,
-              times: [0, 0.4, 1],
-              ease: "easeInOut",
-            }}
-            style={{
-              background:
-                "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%)",
-              mixBlendMode: "screen",
-            }}
-          />
-
-          {/* Effet de morphing géométrique */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
+            key="small-map"
+            className="absolute top-[5px] left-[-15px]"
             initial={{
               opacity: 0,
-              borderRadius: "0%",
-              scale: 1.002,
+              scale: 1.02,
+              filter: "blur(0.3px) brightness(1.015) contrast(1.02)",
+              y: 1,
+              rotateX: 0.5,
             }}
             animate={{
-              opacity: [0, 0.06, 0],
-              borderRadius: ["0%", "2%", "0%"],
-              scale: [1.002, 1, 1.002],
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px) brightness(1) contrast(1)",
+              y: 0,
+              rotateX: 0,
             }}
+            exit={{ opacity: 0 }}
             transition={{
-              duration: 0.1,
-              delay: 0.165,
-              times: [0, 0.5, 1],
-              ease: "easeInOut",
+              duration: 0.15,
+              delay: 0.25,
+              ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            style={{
-              background:
-                "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 70%)",
-              mixBlendMode: "multiply",
-            }}
-          />
-
-          <MiniMapConditionalImage
-            imageError={miniMapError}
-            src={producers[currentProducerIndex]?.miniMap?.url || ""}
-            alt="small map of a region"
-            className="mt-[200px]"
-            onError={handleMiniMapError}
-          />
-        </motion.div>
+          >
+            <MiniMapConditionalImage
+              imageError={miniMapError}
+              src={producers[currentProducerIndex]?.miniMap?.url || ""}
+              alt="small map of a region"
+              className="mt-[200px]"
+              onError={handleMiniMapError}
+            />
+          </motion.div>
+        </AnimatePresence>
       )}
 
       <div className="w-screen h-screen fixed">
