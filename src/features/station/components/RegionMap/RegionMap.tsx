@@ -36,6 +36,80 @@ export default function RegionMap({
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const currentLang = i18n.language;
 
+  const getMiniMapPosition = (stationId: string) => {
+    const stationIdLower = stationId.toLowerCase();
+
+    const positions: { [key: string]: { top: string; left: string } } = {
+      auvergne: { top: "5px", left: "-15px" },
+
+      bourgogne: { top: "-45px", left: "0px" },
+
+      "bretagne-broceliande": { top: "-20px", left: "50px" },
+      "bretagne-rennes": { top: "-30px", left: "10px" },
+      bretagne: { top: "-45px", left: "0px" },
+
+      default: { top: "5px", left: "-15px" },
+    };
+
+    if (stationIdLower.includes("auvergne")) {
+      return positions.auvergne;
+    } else if (stationIdLower.includes("bourgogne")) {
+      return positions.bourgogne;
+    } else if (
+      stationIdLower.includes("bretagne") &&
+      stationIdLower.includes("broceliande")
+    ) {
+      return positions["bretagne-broceliande"];
+    } else if (
+      stationIdLower.includes("bretagne") &&
+      stationIdLower.includes("rennes")
+    ) {
+      return positions["bretagne-rennes"];
+    } else if (stationIdLower.includes("bretagne")) {
+      return positions.bretagne;
+    }
+
+    return positions.default;
+  };
+
+  const getRegionScale = (stationId: string) => {
+    const stationIdLower = stationId.toLowerCase();
+
+    const scales: { [key: string]: number } = {
+      auvergne: 0.63,
+      bourgogne: 0.63,
+
+      "bretagne-broceliande": 0.41,
+      "bretagne-rennes": 0.6,
+      bretagne: 0.63,
+
+      default: 0.63,
+    };
+
+    if (stationIdLower.includes("auvergne")) {
+      return scales.auvergne;
+    } else if (stationIdLower.includes("bourgogne")) {
+      return scales.bourgogne;
+    } else if (
+      stationIdLower.includes("bretagne") &&
+      stationIdLower.includes("broceliande")
+    ) {
+      return scales["bretagne-broceliande"];
+    } else if (
+      stationIdLower.includes("bretagne") &&
+      stationIdLower.includes("rennes")
+    ) {
+      return scales["bretagne-rennes"];
+    } else if (stationIdLower.includes("bretagne")) {
+      return scales.bretagne;
+    }
+
+    return scales.default;
+  };
+
+  const miniMapPosition = getMiniMapPosition(station.id);
+  const regionScale = getRegionScale(station.id);
+
   const producerPhotoOnMap = "absolute w-[144px] top-[5px] z-[5]";
 
   useEffect(() => {
@@ -116,7 +190,7 @@ export default function RegionMap({
         className="absolute top-[0px] w-full h-full"
         initial={{ scale: 1, y: 0, opacity: 1 }}
         animate={{
-          scale: toggle ? 0.63 : 1,
+          scale: toggle ? regionScale : 1,
           y: toggle ? -595 : 0,
           x: toggle ? -15 : 0,
           opacity: toggle ? 1 : 1,
@@ -160,7 +234,11 @@ export default function RegionMap({
         <AnimatePresence>
           <motion.div
             key="small-map"
-            className="absolute top-[5px] left-[-15px]"
+            className="absolute"
+            style={{
+              top: miniMapPosition.top,
+              left: miniMapPosition.left,
+            }}
             initial={{
               opacity: 0,
               scale: 1.02,
