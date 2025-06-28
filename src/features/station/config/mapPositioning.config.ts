@@ -100,7 +100,7 @@ export const basePositions: { [key: string]: MapPosition } = {
 
 // Base scales for regions
 export const baseScales: { [key: string]: number } = {
-  auvergne: 0.73,
+  auvergne: 0.63,
   bourgogne: 0.63,
   default: 0.63,
 };
