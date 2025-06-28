@@ -77,43 +77,18 @@ export default function ProducerDetails({
   const producerPhotoButtonLeft = "w-[51px] ml-[24px]";
   const producerPhotoButtonRight = "w-[51px] mr-[24px]";
 
-  return (
-    <div
-      className="absolute z-1 rounded-[40px] bg-white top-[830px] left-[48px] right-[48px] px-[68px] pt-[126px] py-[68px] overflow-hidden"
-      style={{ height: h > 0 ? h : "auto", transition: "height 0.4s" }}
-      key={producer.id}
-    >
-      <AnimatePresence>
-        <PhotoProducerConditional
-          errorImage={imageError}
-          producerPhoto={producer.picture?.url || ""}
-          classProducer={producerMainPhoto}
-          onError={onError}
-        />
-        {nextProducer && (
-          <motion.div key={producer.id + "0"} {...animationNextSettings}>
-            <PhotoProducerConditional
-              errorImage={imageError}
-              producerPhoto={nextProducer.picture?.url || ""}
-              classProducer={producerMainPhoto}
-              onError={onError}
-            />
-          </motion.div>
-        )}
-        {previousProducer && (
-          <motion.div key={producer.id + "1"} {...animationPreviousSettings}>
-            <PhotoProducerConditional
-              errorImage={imageError}
-              producerPhoto={previousProducer.picture?.url || ""}
-              classProducer={producerMainPhoto}
-              onError={onError}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+  // Fonction pour rendre le contenu complet d'un producteur
+  const renderProducerContent = (prod: Producer, isMain: boolean = false) => (
+    <>
+      <PhotoProducerConditional
+        errorImage={imageError}
+        producerPhoto={prod.picture?.url || ""}
+        classProducer={producerMainPhoto}
+        onError={onError}
+      />
 
       <ul className="fixed top-[700px] left-[400px] flex">
-        {producer.products?.map((product, index) => (
+        {prod.products?.map((product, index) => (
           <li key={index}>
             <FondBlancConditional
               condition={imageError}
@@ -131,55 +106,81 @@ export default function ProducerDetails({
         ))}
       </ul>
 
-      <div className="max-h-[674px]" ref={hRef}>
+      <div className="max-h-[674px]" ref={isMain ? hRef : null}>
         <p
           className="text-[40px] leading-[48px] mb-[48px] font-nexaBold"
           style={{ color: primaryColor }}
         >
-          {producer.name}
+          {prod.name}
         </p>
-        <AnimatePresence>
-          <motion.div
-            className={`text-[28px] leading-[42px] font-nexaRegular ${
-              producer.hasSpace ? "paragraphe" : ""
-            }`}
-            style={{ color: "var(--texte-fiche-fournisseur)" }}
-            initial={{ height: "auto", opacity: 1 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ opacity: 0.5 }}
-            transition={{ duration: 0.1, delay: 0.4 }}
-          >
-            {producer.description && (
-              <>
-                {typeof producer.description === "string" ? (
-                  (() => {
-                    try {
-                      const parsed = JSON.parse(producer.description);
-                      return documentToReactComponents(parsed, {
-                        preserveWhitespace: true,
-                      });
-                    } catch {
-                      return (
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: producer.description,
-                          }}
-                        />
-                      );
-                    }
-                  })()
-                ) : producer.description?.json ? (
-                  documentToReactComponents(producer.description.json, {
-                    preserveWhitespace: true,
-                  })
-                ) : (
-                  <div>Description format not supported</div>
-                )}
-              </>
-            )}
-          </motion.div>
-        </AnimatePresence>
+        <div
+          className={`text-[28px] leading-[42px] font-nexaRegular ${
+            prod.hasSpace ? "paragraphe" : ""
+          }`}
+          style={{ color: "var(--texte-fiche-fournisseur)" }}
+        >
+          {prod.description && (
+            <>
+              {typeof prod.description === "string" ? (
+                (() => {
+                  try {
+                    const parsed = JSON.parse(prod.description);
+                    return documentToReactComponents(parsed, {
+                      preserveWhitespace: true,
+                    });
+                  } catch {
+                    return (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: prod.description,
+                        }}
+                      />
+                    );
+                  }
+                })()
+              ) : prod.description?.json ? (
+                documentToReactComponents(prod.description.json, {
+                  preserveWhitespace: true,
+                })
+              ) : (
+                <div>Description format not supported</div>
+              )}
+            </>
+          )}
+        </div>
       </div>
+    </>
+  );
+
+  return (
+    <div
+      className="absolute z-1 rounded-[40px] bg-white top-[830px] left-[48px] right-[48px] px-[68px] pt-[126px] py-[68px] overflow-hidden"
+      style={{ height: h > 0 ? h : "auto", transition: "height 0.4s" }}
+      key={producer.id}
+    >
+      <AnimatePresence>
+        {/* Contenu principal du producteur actuel */}
+        <div key={producer.id + "main"}>
+          {renderProducerContent(producer, true)}
+        </div>
+
+        {/* Contenu du producteur suivant (pour transition) */}
+        {nextProducer && (
+          <motion.div key={producer.id + "next"} {...animationNextSettings}>
+            {renderProducerContent(nextProducer)}
+          </motion.div>
+        )}
+
+        {/* Contenu du producteur précédent (pour transition) */}
+        {previousProducer && (
+          <motion.div
+            key={producer.id + "previous"}
+            {...animationPreviousSettings}
+          >
+            {renderProducerContent(previousProducer)}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {totalProducers > 1 && (
         <div className="fixed bottom-0 left-[48px] right-[48px] flex mb-[70px] justify-between items-center text-white">
