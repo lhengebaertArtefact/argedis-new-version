@@ -106,7 +106,10 @@ export default function ProducerDetails({
         ))}
       </ul>
 
-      <div className="max-h-[674px]" ref={isMain ? hRef : null}>
+      <div
+        className="fixed top-[956px] left-[116px] right-[116px] max-h-[674px]"
+        ref={isMain ? hRef : null}
+      >
         <p
           className="text-[40px] leading-[48px] mb-[48px] font-nexaBold"
           style={{ color: primaryColor }}
