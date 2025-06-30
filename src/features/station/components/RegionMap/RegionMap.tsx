@@ -299,8 +299,8 @@ export default function RegionMap({
 
             <AnimatePresence>
               <motion.div
-                initial={{ opacity: 0, y: -595 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
                 {producers
