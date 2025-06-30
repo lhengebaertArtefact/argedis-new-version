@@ -154,12 +154,12 @@ export default function RegionMap({
             key="large-map"
             initial={{ opacity: 1 }}
             animate={{
-              opacity: toggle ? 0.7 : 1,
+              opacity: toggle ? 0 : 1,
             }}
             exit={{ opacity: 0 }}
             transition={{
               duration: toggle ? 0.15 : 0.08,
-              delay: toggle ? 0.25 : 0.18,
+              delay: toggle ? 0.6 : 0,
               ease: "easeInOut",
             }}
             className="w-full h-full"
