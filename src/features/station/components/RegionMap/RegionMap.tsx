@@ -38,6 +38,7 @@ export default function RegionMap({
   const [currentProducerIndex, setCurrentProducerIndex] = useState<number>(-1);
   const [showProducer, setShowProducer] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [isClosing, setIsClosing] = useState(false);
   const currentLang = i18n.language;
 
   const miniMapPosition = getMiniMapPosition(station.id);
@@ -82,14 +83,16 @@ export default function RegionMap({
     : { backgroundColor: "#f0f9ff" };
 
   const openOrClose = (producerId: string | null, index: number) => {
-    setOpenProducer(producerId);
-    setCurrentProducerIndex(index);
-    setToggle(!toggle);
-    setShowProducer(false);
-
     if (producerId && index >= 0) {
+      setOpenProducer(producerId);
+      setCurrentProducerIndex(index);
+      setToggle(true);
+      setShowProducer(false);
+      setIsClosing(false);
       onProducerSelect(producers[index], index);
     } else {
+      setIsClosing(true);
+      setToggle(false);
       onProducerSelect(null, -1);
     }
   };
@@ -114,6 +117,13 @@ export default function RegionMap({
     setShowProducer(true);
   }, [producers, onProducerSelect]);
 
+  const handleAnimationComplete = () => {
+    if (isClosing) {
+      setOpenProducer(null);
+      setIsClosing(false);
+    }
+  };
+
   return (
     <div
       className="bg-cover bg-center max-w-full h-screen relative"
@@ -132,7 +142,7 @@ export default function RegionMap({
             : "blur(0px) brightness(1) contrast(1)",
         }}
         transition={{
-          duration: 0.25,
+          duration: toggle ? 0.6 : 1.2,
           ease: [0.25, 0.46, 0.45, 0.94],
           filter: toggle
             ? { delay: 0.15, duration: 0.025 }
@@ -144,7 +154,7 @@ export default function RegionMap({
             key="large-map"
             initial={{ opacity: 1 }}
             animate={{
-              opacity: toggle ? 0 : 1,
+              opacity: toggle ? 0.7 : 1,
             }}
             exit={{ opacity: 0 }}
             transition={{
@@ -189,7 +199,7 @@ export default function RegionMap({
             exit={{ opacity: 0 }}
             transition={{
               duration: 0.15,
-              delay: 0.25,
+              delay: 0.6,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
           >
@@ -237,22 +247,18 @@ export default function RegionMap({
                     ? { y: 0, opacity: 1 }
                     : { y: "100vh", opacity: 0 }
                 }
-                animate={{ y: 0, opacity: 1 }}
-                exit={
-                  showProducer
-                    ? { opacity: 0, transition: { duration: 0.5 } }
-                    : { opacity: 0 }
+                animate={
+                  isClosing ? { y: "100vh", opacity: 0 } : { y: 0, opacity: 1 }
                 }
-                transition={
-                  showProducer
-                    ? {
-                        duration: 0.8,
-                        ease: "easeIn",
-                      }
-                    : {
-                        duration: 0.2,
-                      }
-                }
+                onAnimationComplete={handleAnimationComplete}
+                transition={{
+                  duration: isClosing ? 1 : showProducer ? 0.8 : 0.6,
+                  ease: isClosing
+                    ? "easeInOut"
+                    : showProducer
+                    ? "easeIn"
+                    : "easeOut",
+                }}
               >
                 <ProducerDetails
                   producer={producers[currentProducerIndex]}
