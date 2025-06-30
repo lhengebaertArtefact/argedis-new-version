@@ -143,7 +143,7 @@ export default function RegionMap({
         }}
         transition={{
           duration: toggle ? 0.6 : 1.2,
-          ease: [0.25, 0.46, 0.45, 0.94],
+          ease: toggle ? [0.25, 0.46, 0.45, 0.94] : "easeInOut",
           filter: toggle
             ? { delay: 0.15, duration: 0.025 }
             : { duration: 0.08 },
@@ -252,7 +252,7 @@ export default function RegionMap({
                 }
                 onAnimationComplete={handleAnimationComplete}
                 transition={{
-                  duration: isClosing ? 1 : showProducer ? 0.8 : 0.6,
+                  duration: isClosing ? 1.2 : showProducer ? 0.8 : 0.6,
                   ease: isClosing
                     ? "easeInOut"
                     : showProducer
